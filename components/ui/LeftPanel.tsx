@@ -8,7 +8,7 @@ export default function LeftPanel() {
     <HUDPanel style={styles.panel}>
       {/* System Status */}
       <Text style={styles.title}>System Load</Text>
-      <Text style={styles.metric}>72%</Text>
+      <Text style={styles.metric}>69%</Text>
 
       {/* Graph */}
       <Svg height="80" width="140" style={{ marginTop: 16 }}>

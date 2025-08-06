@@ -1,45 +1,36 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
+// components/ui/CoreRing.tsx
+
+import React from 'react'
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
+import InfinityLoop from './InfinityLoop'
 
 export default function CoreRing() {
+  const { width, height } = useWindowDimensions()
+  const SIZE = Math.min(width, height) * 0.6
+
   return (
-    <View style={styles.container}>
-      <Svg width={200} height={200}>
-        <Circle
-          cx="100"
-          cy="100"
-          r="90"
-          stroke="#00ffff"
-          strokeWidth={6}
-          strokeDasharray="10 10"
-          fill="none"
-        />
-      </Svg>
-      <View style={styles.innerDot} />
-      <Text style={styles.timerText}>00:00:42</Text>
+    <View style={styles.wrapper}>
+      <InfinityLoop size={SIZE} />
+      <Text style={styles.timer}>00:00:57:478.34</Text>
     </View>
-  );
+  )
 }
 
+const NAV_BAR_HEIGHT = 80  // approximate height of your tab bar
+
 const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-    alignItems: 'center',
+  wrapper: {
+    flex: 1,
+    backgroundColor: 'transparent',
     justifyContent: 'center',
-    marginVertical: 32,
+    alignItems: 'center',
+    paddingBottom: NAV_BAR_HEIGHT /.52, // push everything up by half the nav bar
   },
-  innerDot: {
+  timer: {
     position: 'absolute',
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#00ffff',
-  },
-  timerText: {
-    marginTop: 12,
-    color: '#00ffff',
+    bottom: 40,
+    color: '#00FFFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
-});
+})
