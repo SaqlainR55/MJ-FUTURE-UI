@@ -1,17 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import HUDPanel from './HUDPanel';
 
-export default function RightPanel() {
+export default function NewsPanel() {
   return (
     <HUDPanel style={styles.panel}>
       <Text style={styles.title}>NEWS</Text>
       <Text style={styles.newsItem}>• AI assistant launched at scale</Text>
       <Text style={styles.newsItem}>• Crypto market stabilizing</Text>
-
-      <View style={styles.globePlaceholder}>
-        <Text style={styles.globeText}>🌍</Text>
-      </View>
 
       <Text style={styles.footerTimer}>00:00:57:478.34</Text>
     </HUDPanel>

@@ -1,8 +1,8 @@
 // components/ui/CoreRing.tsx
 
-import React from 'react'
-import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
-import InfinityLoop from './InfinityLoop'
+import React from 'react';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import InfinityLoop from './InfinityLoop';
 
 export default function CoreRing() {
   const { width, height } = useWindowDimensions()

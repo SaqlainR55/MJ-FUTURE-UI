@@ -1,34 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import Svg, { Polyline } from 'react-native-svg';
 import HUDPanel from './HUDPanel';
 
-export default function LeftPanel() {
+export default function SystemLoadPanel() {
+  // Dummy battery % values (0–1 range)
+  const batteryHistory = [0.88, 0.86, 0.89, 0.84, 0.87, 0.83, 0.85, 0.82, 0.84, 0.81];
+
+  // Convert to SVG polyline points
+  const graphPoints = batteryHistory.map((level, i) => {
+    const x = i * 14; // spacing between points
+    const y = 80 - level * 70; // invert Y, map 0–1 to 0–70
+    return `${x},${y}`;
+  }).join(' ');
+
+  // Get latest % for display
+  const currentPercent = Math.round((batteryHistory.at(-1) ?? 0) * 100);
+
   return (
     <HUDPanel style={styles.panel}>
-      {/* System Status */}
       <Text style={styles.title}>System Load</Text>
-      <Text style={styles.metric}>69%</Text>
+      <Text style={styles.metric}>{currentPercent}%</Text>
 
       {/* Graph */}
       <Svg height="80" width="140" style={{ marginTop: 16 }}>
         <Polyline
-          points="0,40 20,30 40,35 60,20 80,30 100,10 120,25 140,15"
+          points={graphPoints}
           fill="none"
           stroke="#00ffff"
           strokeWidth="2"
         />
       </Svg>
-
-      {/* Mini Stats */}
-      <View style={styles.statBlock}>
-        <Text style={styles.label}>STOKS</Text>
-        <Text style={styles.value}>18% | 29% | 52%</Text>
-      </View>
-      <View style={styles.statBlock}>
-        <Text style={styles.label}>DATA</Text>
-        <Text style={styles.value}>128.0 | 256.3 | 712.5</Text>
-      </View>
     </HUDPanel>
   );
 }
@@ -54,17 +56,5 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     marginTop: 4,
-  },
-  statBlock: {
-    marginTop: 16,
-  },
-  label: {
-    color: '#888',
-    fontSize: 12,
-  },
-  value: {
-    color: '#0ff',
-    fontSize: 14,
-    fontWeight: '500',
   },
 });
