@@ -1,131 +1,60 @@
-// components/ui/MJAssistant.tsx
+// components/ui/HUDLayout.tsx
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  interpolate,
-  Extrapolation,
-  useDerivedValue,
-  clamp,
-} from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { StyleSheet, View } from 'react-native';
+import MJAssistant from './MJAssistant';
+import NewsPanel from './NewsPanel';
+import StocksTicker from './StocksTicker';
+import SystemLoadPanel from './SystemLoadPanel';
 
-import CoreRing from './CoreRing';   // Audio view (your Earth/rings)
-import ChatMode from './ChatMode';   // Chat view
-
-const { width } = Dimensions.get('window');
-
-export default function MJAssistant() {
-  // x: 0 (Audio) → -width (Chat)
-  const x = useSharedValue(0);
-  const startX = useSharedValue(0);
-
-  const pan = Gesture.Pan()
-    .onBegin(() => {
-      startX.value = x.value;
-    })
-    .onChange((e) => {
-      x.value = clamp(startX.value + e.translationX, -width, 0);
-    })
-    .onEnd((e) => {
-      const halfway = -width / 2;
-      let target = 0;
-
-      if (e.velocityX <= -600) target = -width;     // fast left → Chat
-      else if (e.velocityX >= 600) target = 0;      // fast right → Audio
-      else target = x.value < halfway ? -width : 0; // nearest page
-
-      x.value = withSpring(target, { damping: 14, stiffness: 160 });
-    });
-
-  const sliderStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: x.value }],
-  }));
-
-  // progress for dots: 0 (audio) → 1 (chat)
-  const progress = useDerivedValue(() => -x.value / width);
-
-  const audioDotStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.value, [0, 1], [1, 0.35], Extrapolation.CLAMP),
-    transform: [{ scale: interpolate(progress.value, [0, 1], [1.1, 0.9], Extrapolation.CLAMP) }],
-  }));
-
-  const chatDotStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(progress.value, [0, 1], [0.35, 1], Extrapolation.CLAMP),
-    transform: [{ scale: interpolate(progress.value, [0, 1], [0.9, 1.1], Extrapolation.CLAMP) }],
-  }));
-
+export default function HUDLayout() {
   return (
-    <View style={styles.shell}>
-      <GestureDetector gesture={pan}>
-        <Animated.View style={[styles.slider, { width: width * 2 }, sliderStyle]}>
-          {/* PAGE 1: AUDIO (CoreRing) */}
-          <View style={[styles.page, { width }]}>
-            <View style={styles.audioContainer}>
-              <CoreRing />
-            </View>
-          </View>
+    <View style={styles.wrapper}>
+      {/* Top row: left + right panels */}
+      <View style={styles.row}>
+        <View style={styles.columnLeft}>
+          
+          <SystemLoadPanel />
+        </View>
+        <View style={styles.columnRight}>
+          <NewsPanel />
+        </View>
+      </View>
 
-          {/* PAGE 2: CHAT (fills full area) */}
-          <View style={[styles.pageChat, { width }]}>
-            <ChatMode />
-          </View>
-        </Animated.View>
-      </GestureDetector>
-
-      {/* page dots */}
-      <View style={styles.dotsRow}>
-        <Animated.View style={[styles.dot, audioDotStyle]} />
-        <Animated.View style={[styles.dot, chatDotStyle]} />
+      {/* Center: swipe Audio (CoreRing) ↔ Chat (fills remaining space) */}
+      <View style={styles.center}>
+        <MJAssistant />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // Take all available space from parent (HUD center)
-  shell: {
-    width: '100%',
+  wrapper: {
     flex: 1,
-    overflow: 'hidden',
+    backgroundColor: '#020510',
   },
-  slider: {
-    height: '100%',
+  row: {
     flexDirection: 'row',
-  },
-  // AUDIO page centers CoreRing visually
-  page: {
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  audioContainer: {
     width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    marginTop: 60,
   },
-  // CHAT page stretches so the chat isn't clipped
-  pageChat: {
-    height: '100%',
+  columnLeft: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  columnRight: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    gap: 12,
+  },
+  // let MJAssistant take the rest of the screen height
+  center: {
+    flex: 1,
     width: '100%',
-    backgroundColor: '#0B1426', // match ChatMode background
-  },
-  dotsRow: {
-    position: 'absolute',
-    bottom: 8,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    gap: 8,
-    justifyContent: 'center',
-  },
-  dot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-    backgroundColor: '#00E6E6',
+    alignItems: 'center',
+    marginTop: 12,
   },
 });
