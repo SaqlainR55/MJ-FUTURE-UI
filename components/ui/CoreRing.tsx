@@ -63,7 +63,7 @@ export default function CoreRing() {
         style={[
           styles.earthContainer,
           {
-            left: width / 2 + SIZE / 2 - 80, // Adjusted for bigger size
+            left: width / 2 + SIZE / 2 - 0, // Adjusted for bigger size
             top: height / 2 - 15,
           },
         ]}
