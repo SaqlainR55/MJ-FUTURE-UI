@@ -1,31 +1,34 @@
-const cyan = '#4FF3E1';
-const ink = '#0e1318';
-const panel = '#0f1720';
+// constants/Colors.ts
+// Dawn palette: caring + hopeful (periwinkle accent on deep twilight)
+
+const cyan  = '#A7C5FF'; // Accent — hopeful periwinkle (not green)
+const ink   = '#0A0E17'; // Background — deep twilight blue-black
+const panel = '#0E1522'; // Panels — soft navy
 
 export const Colors = {
   light: {
-    text: '#0b1417',
-    background: '#ffffff',
+    text: '#101421',
+    background: '#FFFFFF',
     tint: cyan,
-    icon: '#5e7b85',
-    tabIconDefault: '#7aa6a2',
+    icon: '#7983A6',
+    tabIconDefault: '#8FA0BE',
     tabIconSelected: cyan,
-    // extras (safe to ignore if unused)
+    // extras
     hudCyan: cyan,
-    hudCyanDim: 'rgba(79,243,225,0.25)',
-    dockBg: 'rgba(255,255,255,0.85)',
+    hudCyanDim: 'rgba(167,197,255,0.28)',
+    dockBg: 'rgba(255,255,255,0.88)',
   },
   dark: {
-    text: '#CFEAE7',
+    text: '#F2F6FF',
     background: ink,
     tint: cyan,
-    icon: '#7bded4',
-    tabIconDefault: '#4f6e71',
+    icon: '#AEB8D9',
+    tabIconDefault: '#6E7BA6',
     tabIconSelected: cyan,
     // extras for HUD
     hudCyan: cyan,
-    hudCyanDim: 'rgba(79,243,225,0.25)',
+    hudCyanDim: 'rgba(167,197,255,0.30)',
     hudPanel: panel,
-    dockBg: 'rgba(14,19,24,0.9)',
+    dockBg: 'rgba(10,14,23,0.92)',
   },
 };

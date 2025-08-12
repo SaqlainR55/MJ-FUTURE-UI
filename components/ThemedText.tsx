@@ -16,6 +16,9 @@ export type ThemedTextProps = TextProps & {
     | 'muted';
 };
 
+const ACCENT = '#A7C5FF';   // hopeful periwinkle
+const LABEL  = '#C9D4F7';   // soft label text
+
 export function ThemedText({
   style,
   lightColor,
@@ -49,13 +52,13 @@ const styles = StyleSheet.create({
   defaultSemiBold: { fontSize: 16, lineHeight: 24, fontWeight: '600' },
   title: { fontSize: 32, fontWeight: 'bold', lineHeight: 34 },
   subtitle: { fontSize: 20, fontWeight: 'bold' },
-  link: { lineHeight: 30, fontSize: 16, color: '#0a7ea4' },
+  link: { lineHeight: 30, fontSize: 16, color: ACCENT },
 
   // NEW
   hudLabel: {
     fontSize: 12,
     letterSpacing: 1,
-    color: '#7bded4',
+    color: LABEL,
     textTransform: 'uppercase',
   },
   hudDigits: {
@@ -63,9 +66,9 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: 1.2,
     textAlign: 'right',
-    fontVariant: ['tabular-nums'], // monospaced numerals
-    color: '#4FF3E1',
-    textShadowColor: 'rgba(79,243,225,0.35)',
+    fontVariant: ['tabular-nums'],
+    color: ACCENT,
+    textShadowColor: 'rgba(167,197,255,0.35)',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 6,
   },

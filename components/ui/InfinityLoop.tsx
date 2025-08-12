@@ -18,7 +18,7 @@ import Svg, {
 
 interface Props { size: number; style?: object }
 
-const CYAN = '#4FF3E1';
+const ACCENT = '#A7C5FF';
 
 const InfinityLoop: React.FC<Props> = ({ size, style }) => {
   const rotateSlow = useSharedValue(0);
@@ -61,14 +61,14 @@ const InfinityLoop: React.FC<Props> = ({ size, style }) => {
       <Svg width={size} height={size} style={StyleSheet.absoluteFill}>
         <Defs>
           <RadialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
-            <Stop offset="0%" stopColor={CYAN} stopOpacity="0.22" />
-            <Stop offset="70%" stopColor={CYAN} stopOpacity="0.0" />
+            <Stop offset="0%" stopColor={ACCENT} stopOpacity="0.22" />
+            <Stop offset="70%" stopColor={ACCENT} stopOpacity="0.0" />
           </RadialGradient>
         </Defs>
         <Circle cx={c} cy={c} r={c} fill="url(#bgGlow)" />
       </Svg>
 
-      {/* Outer / mid / inner rings (existing)… */}
+      {/* Outer / mid / inner rings */}
       <Animated.View style={[StyleSheet.absoluteFill, slowStyle]}>
         <Svg width={size} height={size}>
           {Array.from({ length: 14 }).map((_, i) => {
@@ -79,7 +79,7 @@ const InfinityLoop: React.FC<Props> = ({ size, style }) => {
                 cx={c}
                 cy={c}
                 r={rr}
-                stroke={CYAN}
+                stroke={ACCENT}
                 strokeWidth={i % 4 === 0 ? 2 : 1}
                 strokeDasharray={i % 3 === 0 ? '10 6' : undefined}
                 opacity={0.18 + (i / 14) * 0.35}
@@ -100,7 +100,7 @@ const InfinityLoop: React.FC<Props> = ({ size, style }) => {
                 cx={c}
                 cy={c}
                 r={rr}
-                stroke={CYAN}
+                stroke={ACCENT}
                 strokeWidth={i % 2 === 0 ? 2 : 1}
                 strokeDasharray={i % 2 === 0 ? '5 5' : undefined}
                 opacity={0.36}
@@ -115,14 +115,14 @@ const InfinityLoop: React.FC<Props> = ({ size, style }) => {
         <Svg width={size} height={size}>
           {Array.from({ length: 5 }).map((_, i) => {
             const rr = c * 0.42 - i * (c * 0.42 / 5);
-            return <Circle key={i} cx={c} cy={c} r={rr} stroke={CYAN} strokeWidth={1} opacity={0.5} fill="none" />;
+            return <Circle key={i} cx={c} cy={c} r={rr} stroke={ACCENT} strokeWidth={1} opacity={0.5} fill="none" />;
           })}
           {Array.from({ length: 8 }).map((_, i) => {
             const angle = (i * 360) / 8;
             const rr = c * 0.52;
             const x = c + rr * Math.cos((angle * Math.PI) / 180);
             const y = c + rr * Math.sin((angle * Math.PI) / 180);
-            return <Circle key={i} cx={x} cy={y} r={i % 2 === 0 ? 3.5 : 2} fill={CYAN} opacity={0.85} />;
+            return <Circle key={i} cx={x} cy={y} r={i % 2 === 0 ? 3.5 : 2} fill={ACCENT} opacity={0.85} />;
           })}
         </Svg>
       </Animated.View>
@@ -130,13 +130,13 @@ const InfinityLoop: React.FC<Props> = ({ size, style }) => {
       {/* Radar sweep */}
       <Animated.View style={[StyleSheet.absoluteFill, radarStyle]}>
         <Svg width={size} height={size}>
-          <Path d={d} fill="rgba(79,243,225,0.12)" />
+          <Path d={d} fill="rgba(167,197,255,0.12)" />
         </Svg>
       </Animated.View>
 
       {/* Core pulse */}
       <Animated.View style={[StyleSheet.absoluteFill, glowStyle, { justifyContent: 'center', alignItems: 'center' }]}>
-        <View style={{ width: c * 0.42, height: c * 0.42, borderRadius: (c * 0.42) / 2, backgroundColor: CYAN, opacity: 0.16 }} />
+        <View style={{ width: c * 0.42, height: c * 0.42, borderRadius: (c * 0.42) / 2, backgroundColor: ACCENT, opacity: 0.16 }} />
       </Animated.View>
     </View>
   );

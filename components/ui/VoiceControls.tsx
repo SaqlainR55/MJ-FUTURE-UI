@@ -2,18 +2,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useRef } from 'react';
 import { Animated, Easing, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
-const CYAN = '#4FF3E1';
-const RED = '#EF4444';
+const ACCENT = '#A7C5FF';
+const RED = '#FF6B82';
 const SIZE = 56;
 const R = SIZE / 2;
 
-function HoloButton({
-  color,
-  icon,
-}: {
-  color: string;
-  icon: string;
-}) {
+function HoloButton({ color, icon }: { color: string; icon: string }) {
   const scale = useRef(new Animated.Value(1)).current;
   const flash = useRef(new Animated.Value(0)).current;
   const spin = useRef(new Animated.Value(0)).current;
@@ -48,9 +42,7 @@ function HoloButton({
   return (
     <Pressable onPressIn={pressIn} onPressOut={pressOut}>
       <Animated.View style={[styles.btnWrap, { transform: [{ scale }] }]}>
-        {/* rotating dashed aura */}
         <Animated.View style={[styles.aura, { transform: [{ rotate }] }]} />
-        {/* ripple */}
         <Animated.View style={[styles.ripple, { transform: [{ scale: rippleScale }], opacity: rippleOpacity, borderColor: color }]} />
 
         <LinearGradient colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.35)']} style={[styles.btn, { borderColor: color }]}>
@@ -66,7 +58,7 @@ export default function VoiceControls() {
   return (
     <View style={styles.container}>
       <HoloButton color={RED} icon="🔇" />
-      <HoloButton color={CYAN} icon="❌" />
+      <HoloButton color={ACCENT} icon="❌" />
     </View>
   );
 }
@@ -103,7 +95,7 @@ const styles = StyleSheet.create({
     height: SIZE + 18,
     borderRadius: (SIZE + 18) / 2,
     borderWidth: 1,
-    borderColor: 'rgba(79,243,225,0.35)',
+    borderColor: 'rgba(167,197,255,0.35)',
     borderStyle: 'dashed',
   },
   ripple: {

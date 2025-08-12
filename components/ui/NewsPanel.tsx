@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import HUDPanel from './HUDPanel';
 
+const ACCENT = '#A7C5FF';
+
 export default function NewsPanel() {
   return (
     <HUDPanel style={styles.panel}>
@@ -21,18 +23,18 @@ const styles = StyleSheet.create({
     top: 80,
     width: 180,
     padding: 12,
-    backgroundColor: 'rgba(0,255,255,0.05)',
-    borderColor: '#00ffff44',
+    backgroundColor: 'rgba(167,197,255,0.06)',
+    borderColor: 'rgba(167,197,255,0.28)',
     borderWidth: 1,
     borderRadius: 8,
   },
   title: {
-    color: '#ccc',
+    color: '#C9D4F7',
     fontSize: 14,
     marginBottom: 8,
   },
   newsItem: {
-    color: '#00ffff',
+    color: ACCENT,
     fontSize: 12,
     marginBottom: 4,
   },
@@ -42,11 +44,11 @@ const styles = StyleSheet.create({
   },
   globeText: {
     fontSize: 32,
-    color: '#00ffff',
+    color: ACCENT,
   },
   footerTimer: {
     textAlign: 'center',
-    color: '#00ffff',
+    color: ACCENT,
     fontSize: 14,
     fontWeight: '500',
     marginTop: 8,

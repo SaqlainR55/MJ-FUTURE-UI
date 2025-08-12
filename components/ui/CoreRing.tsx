@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View, useWindowDimensions } from 'react-native';
 import InfinityLoop from './InfinityLoop';
 
-const CYAN = '#4FF3E1';
-const CYAN_DIM = 'rgba(79,243,225,0.28)';
+const ACCENT = '#A7C5FF';
+const ACCENT_DIM = 'rgba(167,197,255,0.28)';
 const INK = 'rgba(14,19,24,1)';
 
 export default function CoreRing() {
@@ -46,7 +46,7 @@ export default function CoreRing() {
     <View style={[styles.wrapper]}>
       {/* Outer glow halo */}
       <LinearGradient
-        colors={['rgba(79,243,225,0.06)', 'rgba(79,243,225,0.0)']}
+        colors={['rgba(167,197,255,0.06)', 'rgba(167,197,255,0.0)']}
         style={{ width: SIZE * 1.2, height: SIZE * 1.2, borderRadius: SIZE * 0.6 }}
       />
 
@@ -56,25 +56,25 @@ export default function CoreRing() {
       </View>
 
       {/* Concentric glass rings */}
-      <View style={[styles.ring, { width: r1, height: r1, borderColor: 'rgba(79,243,225,0.20)' }]} />
-      <View style={[styles.ring, { width: r2, height: r2, borderColor: 'rgba(79,243,225,0.16)' }]} />
-      <View style={[styles.ring, { width: r3, height: r3, borderColor: 'rgba(79,243,225,0.14)' }]} />
+      <View style={[styles.ring, { width: r1, height: r1, borderColor: 'rgba(167,197,255,0.20)' }]} />
+      <View style={[styles.ring, { width: r2, height: r2, borderColor: 'rgba(167,197,255,0.16)' }]} />
+      <View style={[styles.ring, { width: r3, height: r3, borderColor: 'rgba(167,197,255,0.14)' }]} />
 
       {/* Dashed orbit (animated rotation) */}
       <Animated.View style={[styles.dashed, { width: r1 * 0.92, height: r1 * 0.92, transform: [{ rotate: rotA }] }]} />
 
       {/* Orbiters */}
       <Animated.View style={[styles.orbiterWrap, { width: r2, height: r2, transform: [{ rotate: rotA }] }]}>
-        <View style={[styles.dot, { backgroundColor: CYAN }]} />
+        <View style={[styles.dot, { backgroundColor: ACCENT }]} />
       </Animated.View>
 
       <Animated.View style={[styles.orbiterWrap, { width: r3 * 0.84, height: r3 * 0.84, transform: [{ rotate: rotB }] }]}>
-        <View style={[styles.dot, { backgroundColor: CYAN_DIM }]} />
+        <View style={[styles.dot, { backgroundColor: ACCENT_DIM }]} />
       </Animated.View>
 
       {/* Core glow */}
       <LinearGradient
-        colors={['rgba(79,243,225,0.18)', 'rgba(79,243,225,0.04)']}
+        colors={['rgba(167,197,255,0.18)', 'rgba(167,197,255,0.04)']}
         style={{ position: 'absolute', width: r3 * 0.7, height: r3 * 0.7, borderRadius: r3 * 0.35 }}
       />
     </View>
@@ -96,8 +96,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 9999,
     borderWidth: 1,
-    borderColor: 'rgba(79,243,225,0.25)',
-    // RN dashed border for circles is supported
+    borderColor: 'rgba(167,197,255,0.25)',
     borderStyle: 'dashed',
   },
   orbiterWrap: {
@@ -107,11 +106,11 @@ const styles = StyleSheet.create({
   },
   dot: {
     position: 'absolute',
-    top: -6, // sits on the path
+    top: -6,
     width: 8,
     height: 8,
     borderRadius: 4,
-    shadowColor: CYAN,
+    shadowColor: ACCENT,
     shadowOpacity: 0.6,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 0 },

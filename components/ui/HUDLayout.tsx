@@ -8,18 +8,17 @@ import VoiceControls from './VoiceControls';
 
 const { width } = Dimensions.get('window');
 
-const cyan = '#4FF3E1';
-const cyanDim = 'rgba(79,243,225,0.2)';
-const bg = '#0e1318';
-const red = '#ef4444';
+const cyan = '#A7C5FF';                       // periwinkle accent
+const cyanDim = 'rgba(167,197,255,0.20)';     // dim bars/ticks
+const bg = '#0A0E17';                          // deep twilight
+const red = '#FF6B82';                         // softer danger coral
 
-const P = 16;                 // page padding
-const COL_GAP = 18;           // gap between two cards
-const CARD_MIN_H = 124;       // uniform card height
-const BOTTOM_RESERVED = 96;   // room for VoiceControls/tab bar
-const INNER_V_PAD = 4;        // unify inner spacing
+const P = 16;
+const COL_GAP = 18;
+const CARD_MIN_H = 124;
+const BOTTOM_RESERVED = 96;
+const INNER_V_PAD = 4;
 
-// ---------- helpers ----------
 const pad = (n: number, len = 2) => String(n).padStart(len, '0');
 
 const spark = (n = 18, seed = 13) => {
@@ -37,25 +36,22 @@ const defaultHoldings = [
   { symbol: 'TSLA', qty: 5,  price: 242.09, changePct: +2.46 },
 ];
 
-// timers
-const BOOT_AT = Date.now(); // uptime anchor
-
+const BOOT_AT = Date.now();
 const formatRunTime = (ms: number) => {
   const totalMs = Math.max(0, ms);
   const totalSec = Math.floor(totalMs / 1000);
   const h = Math.floor(totalSec / 3600);
   const m = Math.floor((totalSec % 3600) / 60);
   const s = totalSec % 60;
-  const cs = Math.floor((totalMs % 1000) / 10); // centiseconds
+  const cs = Math.floor((totalMs % 1000) / 10);
   return `${pad(h)}:${pad(m)}:${pad(s)}:${pad(cs)}`;
 };
 
-// ---------- frame ----------
 const Frame = ({ children, style }: { children: React.ReactNode; style?: any }) => (
   <HUDPanel style={[{ minHeight: CARD_MIN_H }, style]}>{children}</HUDPanel>
 );
 
-// ---------- cards ----------
+// ---- cards (unchanged logic) ----
 function SystemLoadCard() {
   const [tick, setTick] = useState(0);
   useEffect(() => {
@@ -113,9 +109,7 @@ function StockInvestmentCard() {
         <View key={h.symbol} style={styles.tinyRow}>
           <ThemedText style={styles.sym}>{h.symbol}</ThemedText>
           <ThemedText style={styles.qty}>x{h.qty}</ThemedText>
-          <ThemedText
-            style={[styles.change, { color: h.changePct >= 0 ? cyan : red }]}
-          >
+          <ThemedText style={[styles.change, { color: h.changePct >= 0 ? cyan : red }]}>
             {h.changePct >= 0 ? '+' : ''}{h.changePct.toFixed(2)}%
           </ThemedText>
         </View>
@@ -135,7 +129,6 @@ function StockInvestmentCard() {
   );
 }
 
-// WATCH -> RUN TIME (auto-fit, monospaced, right-aligned, no ellipsis)
 function DigitalWatchCard() {
   const [now, setNow] = useState(Date.now());
   const [cardW, setCardW] = useState(0);
@@ -148,9 +141,8 @@ function DigitalWatchCard() {
   }, []);
 
   const elapsed = now - BOOT_AT;
-  const text = formatRunTime(elapsed); // "HH:MM:SS:CC"
+  const text = formatRunTime(elapsed);
 
-  // Auto-fit font size to available width (tabular numerals ≈ 0.62em per char)
   const CHAR_FACTOR = 0.62;
   const H_PADDING = 12;
   const minFS = 22, maxFS = 40;
@@ -162,7 +154,6 @@ function DigitalWatchCard() {
   return (
     <Frame>
       <ThemedText type="hudLabel">RUN TIME</ThemedText>
-
       <View onLayout={(e) => setCardW(e.nativeEvent.layout.width)} style={{ flexGrow: 1, justifyContent: 'center' }}>
         <ThemedText type="hudDigits" style={{ fontSize: fitFS, alignSelf: 'flex-end' }}>
           {text}
@@ -172,19 +163,14 @@ function DigitalWatchCard() {
   );
 }
 
-// ---------- main ----------
 export default function HUDLayout() {
   const [centerH, setCenterH] = useState(0);
-
-  // ring size = fit width nicely, but also fill the center vertical area
   const ringSize = Math.max(220, Math.min(width * 0.92, centerH * 0.98));
-  const ringScale = ringSize / 420; // CoreRing baseline scale
+  const ringScale = ringSize / 420;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-
-        {/* Top row */}
         <View style={styles.row}>
           <View style={[styles.col, { marginRight: COL_GAP }]}>
             <SystemLoadCard />
@@ -194,17 +180,12 @@ export default function HUDLayout() {
           </View>
         </View>
 
-        {/* Center ring */}
-        <View
-          style={styles.centerArea}
-          onLayout={e => setCenterH(e.nativeEvent.layout.height)}
-        >
+        <View style={styles.centerArea} onLayout={e => setCenterH(e.nativeEvent.layout.height)}>
           <View style={{ transform: [{ scale: ringScale }] }}>
             <CoreRing />
           </View>
         </View>
 
-        {/* Bottom row */}
         <View style={styles.row}>
           <View style={[styles.col, { marginRight: COL_GAP }]}>
             <StockInvestmentCard />
@@ -214,7 +195,6 @@ export default function HUDLayout() {
           </View>
         </View>
 
-        {/* Spacer for controls */}
         <View style={{ height: BOTTOM_RESERVED }} />
       </View>
 
@@ -223,50 +203,36 @@ export default function HUDLayout() {
   );
 }
 
-// ---------- styles ----------
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: bg },
   content: { flex: 1, paddingHorizontal: P, paddingTop: 8 },
 
-  row: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    marginBottom: 14,
-  },
+  row: { flexDirection: 'row', alignItems: 'stretch', marginBottom: 14 },
   col: { flex: 1 },
 
-  // titles & small text
-  meta: { color: '#9fdad3' },
-  bullet: { color: '#bfeeee', fontSize: 12, marginTop: 4, opacity: 0.85 },
+  meta: { color: '#AEB8D9' },
+  bullet: { color: '#D6E2FF', fontSize: 12, marginTop: 4, opacity: 0.85 },
 
-  // layout bits
   rowSpace: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 
-  // system load line
   waveRow: { marginTop: 10, height: 16, flexDirection: 'row', alignItems: 'flex-end' },
   waveDot: { width: 3, height: 8, backgroundColor: cyanDim, borderRadius: 2, marginRight: 2 },
 
-  // investments
   sparkWrap: { height: 34, marginTop: 6, marginBottom: 8, flexDirection: 'row', alignItems: 'flex-end' },
   sparkBar: { flex: 1, alignSelf: 'flex-end', backgroundColor: cyanDim, borderRadius: 2, marginRight: 2 },
+
   rowDivider: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#1b2733',
+    borderTopColor: '#151C27',
     paddingTop: 8,
   },
   tinyRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
-  sym: { color: '#c8f7f1', fontWeight: '700', width: 54 },
-  qty: { color: '#9fdad3', width: 38, textAlign: 'right' },
+  sym: { color: '#E6EEFF', fontWeight: '700', width: 54 },
+  qty: { color: '#AEB8D9', width: 38, textAlign: 'right' },
   change: { marginLeft: 8, width: 72, textAlign: 'right', fontWeight: '700' },
 
-  // center area for ring
-  centerArea: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 0,
-  },
+  centerArea: { flex: 1, alignItems: 'center', justifyContent: 'center', marginVertical: 0 },
 });

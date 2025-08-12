@@ -8,6 +8,8 @@ const STOCKS = [
   { name: 'AMZN', value: '+2.14%' },
 ];
 
+const ACCENT = '#A7C5FF';
+
 export default function StocksTicker() {
   const translateX = useRef(new Animated.Value(0)).current;
 
@@ -46,8 +48,8 @@ const styles = StyleSheet.create({
     height: 28,
     width: '60%',
     overflow: 'hidden',
-    backgroundColor: 'rgba(0, 255, 255, 0.06)',
-    borderColor: '#00ffff',
+    backgroundColor: 'rgba(167,197,255,0.06)',
+    borderColor: 'rgba(167,197,255,0.28)',
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 8,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: '#00ffff',
+    color: ACCENT,
     fontSize: 11,
     fontWeight: '500',
   },
