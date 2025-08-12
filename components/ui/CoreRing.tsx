@@ -1,35 +1,119 @@
-// components/ui/CoreRing.tsx
-import React from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect, useRef } from 'react';
+import { Animated, Easing, StyleSheet, View, useWindowDimensions } from 'react-native';
 import InfinityLoop from './InfinityLoop';
 
-const NAV_BAR_HEIGHT = 80;
+const CYAN = '#4FF3E1';
+const CYAN_DIM = 'rgba(79,243,225,0.28)';
+const INK = 'rgba(14,19,24,1)';
 
 export default function CoreRing() {
   const { width, height } = useWindowDimensions();
-  const SIZE = Math.min(width, height) * 0.7;
+  const SIZE = Math.min(width, height) * 0.70;
+
+  // Rotations for orbiters + dashed ring
+  const spinA = useRef(new Animated.Value(0)).current;
+  const spinB = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const loop = (v: Animated.Value, dur: number, dir: 1 | -1 = 1) =>
+      Animated.loop(
+        Animated.timing(v, {
+          toValue: 1,
+          duration: dur,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
+
+    loop(spinA, 18000, 1);
+    loop(spinB, 26000, -1);
+
+    return () => {
+      spinA.stopAnimation();
+      spinB.stopAnimation();
+    };
+  }, [spinA, spinB]);
+
+  const r1 = SIZE * 0.86;
+  const r2 = SIZE * 0.66;
+  const r3 = SIZE * 0.48;
+
+  const rotA = spinA.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });
+  const rotB = spinB.interpolate({ inputRange: [0, 1], outputRange: ['360deg', '0deg'] });
 
   return (
-    <View style={styles.wrapper}>
-      <InfinityLoop size={SIZE} />
+    <View style={[styles.wrapper]}>
+      {/* Outer glow halo */}
+      <LinearGradient
+        colors={['rgba(79,243,225,0.06)', 'rgba(79,243,225,0.0)']}
+        style={{ width: SIZE * 1.2, height: SIZE * 1.2, borderRadius: SIZE * 0.6 }}
+      />
 
+      {/* Your animated SVG loop */}
+      <View style={{ position: 'absolute' }}>
+        <InfinityLoop size={SIZE} />
+      </View>
+
+      {/* Concentric glass rings */}
+      <View style={[styles.ring, { width: r1, height: r1, borderColor: 'rgba(79,243,225,0.20)' }]} />
+      <View style={[styles.ring, { width: r2, height: r2, borderColor: 'rgba(79,243,225,0.16)' }]} />
+      <View style={[styles.ring, { width: r3, height: r3, borderColor: 'rgba(79,243,225,0.14)' }]} />
+
+      {/* Dashed orbit (animated rotation) */}
+      <Animated.View style={[styles.dashed, { width: r1 * 0.92, height: r1 * 0.92, transform: [{ rotate: rotA }] }]} />
+
+      {/* Orbiters */}
+      <Animated.View style={[styles.orbiterWrap, { width: r2, height: r2, transform: [{ rotate: rotA }] }]}>
+        <View style={[styles.dot, { backgroundColor: CYAN }]} />
+      </Animated.View>
+
+      <Animated.View style={[styles.orbiterWrap, { width: r3 * 0.84, height: r3 * 0.84, transform: [{ rotate: rotB }] }]}>
+        <View style={[styles.dot, { backgroundColor: CYAN_DIM }]} />
+      </Animated.View>
+
+      {/* Core glow */}
+      <LinearGradient
+        colors={['rgba(79,243,225,0.18)', 'rgba(79,243,225,0.04)']}
+        style={{ position: 'absolute', width: r3 * 0.7, height: r3 * 0.7, borderRadius: r3 * 0.35 }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: NAV_BAR_HEIGHT / 0,
   },
-  timer: {
+  ring: {
     position: 'absolute',
-    bottom: 40,
-    color: '#00FFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    borderRadius: 9999,
+    borderWidth: 1,
+  },
+  dashed: {
+    position: 'absolute',
+    borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: 'rgba(79,243,225,0.25)',
+    // RN dashed border for circles is supported
+    borderStyle: 'dashed',
+  },
+  orbiterWrap: {
+    position: 'absolute',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  dot: {
+    position: 'absolute',
+    top: -6, // sits on the path
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    shadowColor: CYAN,
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 0 },
   },
 });
