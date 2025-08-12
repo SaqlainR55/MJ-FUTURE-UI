@@ -1,13 +1,12 @@
 // components/ui/HUDPanel.tsx
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'; // ⬅️ add StyleProp
 
 interface Props {
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>; // ⬅️ allow object OR array
 }
-
 /**
  * Futuristic HUD panel:
  * - Soft cyan outer glow (no clipping)

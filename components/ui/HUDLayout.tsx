@@ -1,7 +1,9 @@
 // components/ui/HUDLayout.tsx
+import { ThemedText } from '@/components/ThemedText';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, View } from 'react-native';
 import CoreRing from './CoreRing';
+import HUDPanel from './HUDPanel';
 import VoiceControls from './VoiceControls';
 
 const { width } = Dimensions.get('window');
@@ -9,7 +11,6 @@ const { width } = Dimensions.get('window');
 const cyan = '#4FF3E1';
 const cyanDim = 'rgba(79,243,225,0.2)';
 const bg = '#0e1318';
-const panel = '#0f1720';
 const red = '#ef4444';
 
 const P = 16;                 // page padding
@@ -51,10 +52,7 @@ const formatRunTime = (ms: number) => {
 
 // ---------- frame ----------
 const Frame = ({ children, style }: { children: React.ReactNode; style?: any }) => (
-  <View style={[styles.card, style]}>
-    <View style={styles.cardBorder} />
-    {children}
-  </View>
+  <HUDPanel style={[{ minHeight: CARD_MIN_H }, style]}>{children}</HUDPanel>
 );
 
 // ---------- cards ----------
@@ -68,9 +66,9 @@ function SystemLoadCard() {
 
   return (
     <Frame>
-      <Text style={styles.cardTitle}>System Load</Text>
+      <ThemedText type="hudLabel">System Load</ThemedText>
       <View style={styles.rowSpace}>
-        <Text style={styles.bigNumber}>81%</Text>
+        <ThemedText type="hudDigits" style={{ textAlign: 'left' }}>81%</ThemedText>
       </View>
       <View style={styles.waveRow}>
         {Array.from({ length: bars }).map((_, i) => {
@@ -84,13 +82,12 @@ function SystemLoadCard() {
 }
 
 function NewsCard() {
-  // ⛔ removed the stopwatch/timer under NEWS for a clean, static panel
   return (
     <Frame>
-      <Text style={styles.cardTitle}>NEWS</Text>
+      <ThemedText type="hudLabel">NEWS</ThemedText>
       <View style={{ paddingTop: INNER_V_PAD }}>
-        <Text style={styles.bullet}>• AI assistant launched at scale</Text>
-        <Text style={styles.bullet}>• Crypto market stabilizing</Text>
+        <ThemedText style={styles.bullet}>• AI assistant launched at scale</ThemedText>
+        <ThemedText style={styles.bullet}>• Crypto market stabilizing</ThemedText>
       </View>
     </Frame>
   );
@@ -104,7 +101,7 @@ function StockInvestmentCard() {
 
   return (
     <Frame>
-      <Text style={styles.cardTitle}>Investments</Text>
+      <ThemedText type="hudLabel">Investments</ThemedText>
 
       <View style={styles.sparkWrap}>
         {line.map((v, i) => (
@@ -114,23 +111,25 @@ function StockInvestmentCard() {
 
       {holdings.map((h) => (
         <View key={h.symbol} style={styles.tinyRow}>
-          <Text style={styles.sym}>{h.symbol}</Text>
-          <Text style={styles.qty}>x{h.qty}</Text>
-          <Text style={[styles.change, { color: h.changePct >= 0 ? cyan : red }]}>
+          <ThemedText style={styles.sym}>{h.symbol}</ThemedText>
+          <ThemedText style={styles.qty}>x{h.qty}</ThemedText>
+          <ThemedText
+            style={[styles.change, { color: h.changePct >= 0 ? cyan : red }]}
+          >
             {h.changePct >= 0 ? '+' : ''}{h.changePct.toFixed(2)}%
-          </Text>
+          </ThemedText>
         </View>
       ))}
 
       <View style={styles.rowDivider}>
-        <Text style={[styles.meta, { flex: 1 }]}>Total</Text>
-        <Text style={[styles.meta, { fontWeight: '700', color: cyan }]}>${total.toFixed(2)}</Text>
+        <ThemedText style={[styles.meta, { flex: 1 }]}>Total</ThemedText>
+        <ThemedText style={[styles.meta, { fontWeight: '700', color: cyan }]}>${total.toFixed(2)}</ThemedText>
       </View>
       <View style={styles.tinyRow}>
-        <Text style={[styles.meta, { flex: 1 }]}>Day P/L</Text>
-        <Text style={[styles.meta, { fontWeight: '700', color: day >= 0 ? cyan : red }]}>
+        <ThemedText style={[styles.meta, { flex: 1 }]}>Day P/L</ThemedText>
+        <ThemedText style={[styles.meta, { fontWeight: '700', color: day >= 0 ? cyan : red }]}>
           {day >= 0 ? '+' : ''}${day.toFixed(2)}
-        </Text>
+        </ThemedText>
       </View>
     </Frame>
   );
@@ -142,7 +141,6 @@ function DigitalWatchCard() {
   const [cardW, setCardW] = useState(0);
   const raf = useRef<number | null>(null);
 
-  // smooth ticker
   useEffect(() => {
     const loop = () => { setNow(Date.now()); raf.current = requestAnimationFrame(loop); };
     raf.current = requestAnimationFrame(loop);
@@ -150,39 +148,25 @@ function DigitalWatchCard() {
   }, []);
 
   const elapsed = now - BOOT_AT;
-  const text = formatRunTime(elapsed); // "HH:MM:SS:CC" => length = 11
+  const text = formatRunTime(elapsed); // "HH:MM:SS:CC"
 
   // Auto-fit font size to available width (tabular numerals ≈ 0.62em per char)
-  const CHAR_FACTOR = 0.62;             // avg width ratio for tabular digits
-  const H_PADDING = 12;                  // card inner horizontal padding
+  const CHAR_FACTOR = 0.62;
+  const H_PADDING = 12;
   const minFS = 22, maxFS = 40;
   const fitFS =
     cardW > 0
-      ? Math.max(
-          minFS,
-          Math.min(
-            maxFS,
-            Math.floor((cardW - H_PADDING * 2) / (CHAR_FACTOR * text.length))
-          )
-        )
+      ? Math.max(minFS, Math.min(maxFS, Math.floor((cardW - H_PADDING * 2) / (CHAR_FACTOR * text.length))))
       : 28;
 
   return (
     <Frame>
-      <Text style={styles.cardTitle}>RUN TIME</Text>
+      <ThemedText type="hudLabel">RUN TIME</ThemedText>
 
-      {/* measure once to compute proper font size */}
-      <View
-        onLayout={(e) => setCardW(e.nativeEvent.layout.width)}
-        style={{ flexGrow: 1, justifyContent: 'center' }}
-      >
-        <Text
-          style={[styles.bigDigits, { fontSize: fitFS }]}
-          numberOfLines={1}
-          ellipsizeMode="clip"   // ← no "..." ever
-        >
+      <View onLayout={(e) => setCardW(e.nativeEvent.layout.width)} style={{ flexGrow: 1, justifyContent: 'center' }}>
+        <ThemedText type="hudDigits" style={{ fontSize: fitFS, alignSelf: 'flex-end' }}>
           {text}
-        </Text>
+        </ThemedText>
       </View>
     </Frame>
   );
@@ -251,47 +235,12 @@ const styles = StyleSheet.create({
   },
   col: { flex: 1 },
 
-  card: {
-    minHeight: CARD_MIN_H,
-    backgroundColor: panel,
-    borderRadius: 16,
-    padding: 12,
-    shadowColor: cyan,
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
-    overflow: 'hidden',
-  },
-  cardBorder: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(79,243,225,0.25)',
-  },
-
   // titles & small text
-  cardTitle: { color: '#7bded4', fontSize: 12, letterSpacing: 1, marginBottom: 6 },
   meta: { color: '#9fdad3' },
   bullet: { color: '#bfeeee', fontSize: 12, marginTop: 4, opacity: 0.85 },
 
   // layout bits
   rowSpace: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-
-  // numbers
-  bigNumber: { color: cyan, fontSize: 22, fontWeight: '800' },
-
-  // digital time (monospaced look)
-  bigDigits: {
-    color: cyan,
-    fontWeight: '900',
-    letterSpacing: 1.2,
-    fontVariant: ['tabular-nums'],   // monospaced numerals (iOS)
-    textAlign: 'right',              // align to the right edge for HUD feel
-    textShadowColor: 'rgba(79,243,225,0.35)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 6,
-  },
-
 
   // system load line
   waveRow: { marginTop: 10, height: 16, flexDirection: 'row', alignItems: 'flex-end' },

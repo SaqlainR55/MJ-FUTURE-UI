@@ -1,26 +1,31 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const cyan = '#4FF3E1';
+const ink = '#0e1318';
+const panel = '#0f1720';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#0b1417',
+    background: '#ffffff',
+    tint: cyan,
+    icon: '#5e7b85',
+    tabIconDefault: '#7aa6a2',
+    tabIconSelected: cyan,
+    // extras (safe to ignore if unused)
+    hudCyan: cyan,
+    hudCyanDim: 'rgba(79,243,225,0.25)',
+    dockBg: 'rgba(255,255,255,0.85)',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#CFEAE7',
+    background: ink,
+    tint: cyan,
+    icon: '#7bded4',
+    tabIconDefault: '#4f6e71',
+    tabIconSelected: cyan,
+    // extras for HUD
+    hudCyan: cyan,
+    hudCyanDim: 'rgba(79,243,225,0.25)',
+    hudPanel: panel,
+    dockBg: 'rgba(14,19,24,0.9)',
   },
 };
