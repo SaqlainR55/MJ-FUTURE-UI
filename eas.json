@@ -1,0 +1,20 @@
+{
+  "cli": { "version": ">= 11.0.0" },
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "ios": { "resourceClass": "m-medium" },
+      "android": { "gradleCommand": ":app:assembleRelease" }
+    },
+    "production": {
+      "autoIncrement": true,
+      "ios": { "resourceClass": "m-medium" },
+      "android": { "gradleCommand": ":app:bundleRelease" }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": { "appleId": "your-apple-id@example.com" }
+    }
+  }
+}

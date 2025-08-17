@@ -8,35 +8,47 @@
     "scheme": "mjfutureui",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.yourcompany.mjfutureui",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "MJ uses the camera to take photos for attachments.",
+        "NSMicrophoneUsageDescription": "MJ records voice notes for chat.",
+        "NSPhotoLibraryUsageDescription": "MJ lets you attach images from your library.",
+        "NSPhotoLibraryAddUsageDescription": "MJ can save exported files to your library.",
+        "LSApplicationQueriesSchemes": ["mjfutureui"]
+      },
+      "usesAppleSignIn": false
     },
+
     "android": {
+      "package": "com.yourcompany.mjfutureui",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
+
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
+      ["expo-splash-screen", { "image": "./assets/images/splash-icon.png", "imageWidth": 200, "resizeMode": "contain", "backgroundColor": "#ffffff" }]
     ],
-    "experiments": {
-      "typedRoutes": true
-    }
+    "experiments": { "typedRoutes": true }
   }
 }
